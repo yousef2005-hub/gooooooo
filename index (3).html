@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة وتحليل نتائج الطلاب</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #ffd700, #ff8c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: #b0c4de;
+      margin-bottom: 30px;
+      font-size: 1rem;
+    }
+
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .hint-box {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      text-align: right;
+    }
+
+    .hint-box h3 {
+      color: #ffd700;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+
+    .hint-box ol {
+      padding-right: 20px;
+      line-height: 1.9;
+      color: #e0e0e0;
+      font-size: 0.95rem;
+    }
+
+    .hint-box kbd {
+      background: #2a5298;
+      border: 1px solid #4a7bd8;
+      border-radius: 5px;
+      padding: 2px 8px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #ffd700;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #ffd700, #ff8c00);
+      color: #1e3c72;
+      border: none;
+      padding: 14px 40px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(255, 140, 0, 0.6);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .footer {
+      margin-top: 25px;
+      color: #8fa8cc;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <span class="icon">🎓</span>
+    <h1>نظام إدارة وتحليل نتائج الطلاب</h1>
+    <p class="subtitle">Console-Based Student Management & Analysis System</p>
+
+    <div class="hint-box">
+      <h3>📌 خطوات التشغيل:</h3>
+      <ol>
+        <li>اضغط <kbd>F12</kbd> أو <kbd>Ctrl + Shift + I</kbd> لفتح أدوات المطور.</li>
+        <li>انتقل إلى تبويب <strong>Console</strong>.</li>
+        <li>ستجد التقرير الكامل للطلاب معروضًا تلقائيًا.</li>
+        <li>أو اضغط زر <strong>"إعادة تشغيل التحليل"</strong> أدناه.</li>
+      </ol>
+    </div>
+
+    <button class="btn" onclick="runAnalysis()">🔄 إعادة تشغيل التحليل</button>
+
+    <p class="footer">تم تطوير النظام باستخدام OOP + Modern Array Methods</p>
+  </div>
+
+  <script>
+    // ============================================
+    // 1. كلاس الطالب (Student Class)
+    // ============================================
+    class Student {
+      constructor(id, name, grades, attendance) {
+        this.id = id;
+        this.name = name;
+        this.grades = grades;
+        this.attendance = attendance;
+      }
+
+      // دالة حساب المتوسط
+      getAverage() {
+        const sum = this.grades.reduce((acc, grade) => acc + grade, 0);
+        return sum / this.grades.length;
+      }
+
+      // دالة التقدير
+      getGradeLetter(average) {
+        if (average >= 90) return "A";
+        else if (average >= 80) return "B";
+        else if (average >= 70) return "C";
+        else if (average >= 60) return "D";
+        else if (average >= 50) return "E";
+        else return "F";
+      }
+
+      // دالة النتيجة النهائية (شرطان)
+      getFinalResult() {
+        const average = this.getAverage();
+        const hasPassedGrades = average >= 50;
+        const hasEnoughAttendance = this.attendance >= 75;
+        const isPassed = hasPassedGrades && hasEnoughAttendance;
+
+        return {
+          id: this.id,
+          name: this.name,
+          average: average.toFixed(2),
+          letter: this.getGradeLetter(average),
+          attendance: this.attendance + "%",
+          status: isPassed ? "✅ ناجح" : "❌ راسب",
+          reason: !hasPassedGrades
+            ? "الدرجات أقل من الحد الأدنى (50)"
+            : !hasEnoughAttendance
+            ? "نسبة الحضور أقل من 75%"
+            : "استوفى جميع الشروط"
+        };
+      }
+    }
+
+    // ============================================
+    // 2. إنشاء بيانات الطلاب
+    // ============================================
+    const students = [
+      new Student(101, "أحمد محمد",   [95, 88, 92], 90),
+      new Student(102, "سارة علي",    [78, 82, 75], 85),
+      new Student(103, "خالد حسن",    [60, 55, 68], 70),
+      new Student(104, "منى إبراهيم", [45, 52, 48], 80),
+      new Student(105, "يوسف عمر",    [85, 90, 88], 60),
+      new Student(106, "ليلى سعيد",   [35, 40, 30], 50),
+    ];
+
+    // ============================================
+    // 3. دالة تشغيل التحليل
+    // ============================================
+    function runAnalysis() {
+      console.clear();
+
+      console.log("%c═══════════════════════════════════════════", "color: #ffd700; font-weight: bold;");
+      console.log("%c        📊 نظام إدارة نتائج الطلاب        ", "color: #ffd700; font-weight: bold; font-size: 16px;");
+      console.log("%c═══════════════════════════════════════════\n", "color: #ffd700; font-weight: bold;");
+
+      // --- [1] تقرير الطلاب التفصيلي ---
+      console.log("%c🔹 [1] تقرير الطلاب التفصيلي:\n", "color: #4fc3f7; font-weight: bold; font-size: 14px;");
+
+      students.forEach((student) => {
+        const result = student.getFinalResult();
+        console.log(`👤 رقم الجلوس: ${result.id} | الاسم: ${result.name}`);
+        console.log(`   📈 المتوسط: ${result.average} | التقدير: ${result.letter}`);
+        console.log(`   🗓️  الحضور: ${result.attendance}`);
+        console.log(`   🎯 النتيجة: ${result.status} — (${result.reason})`);
+        console.log("───────────────────────────────────────────");
+      });
+
+      // --- [2] الإحصائيات العامة ---
+      const passedStudents = students.filter((s) => {
+        const avg = s.getAverage();
+        return avg >= 50 && s.attendance >= 75;
+      });
+
+      const failedStudents = students.filter((s) => {
+        const avg = s.getAverage();
+        return !(avg >= 50 && s.attendance >= 75);
+      });
+
+      const classAverage =
+        students.reduce((acc, s) => acc + s.getAverage(), 0) / students.length;
+
+      const topStudent = students.reduce((best, s) =>
+        s.getAverage() > best.getAverage() ? s : best
+      );
+
+      const passedNames = passedStudents.map((s) => s.name);
+
+      console.log("%c🔹 [2] الإحصائيات العامة:\n", "color: #4fc3f7; font-weight: bold; font-size: 14px;");
+      console.log(`👥 عدد الطلاب الكلي: ${students.length}`);
+      console.log(`✅ عدد الناجحين: ${passedStudents.length}`);
+      console.log(`❌ عدد الراسبين: ${failedStudents.length}`);
+      console.log(`📊 متوسط درجات الفصل: ${classAverage.toFixed(2)}`);
+      console.log(`🏆 الطالب الأول: ${topStudent.name} (${topStudent.getAverage().toFixed(2)})`);
+      console.log(`📝 أسماء الناجحين: ${passedNames.join(" | ")}`);
+
+      // --- [3] توزيع التقديرات ---
+      const gradeDistribution = students.reduce((acc, s) => {
+        const letter = s.getGradeLetter(s.getAverage());
+        acc[letter] = (acc[letter] || 0) + 1;
+        return acc;
+      }, {});
+
+      console.log("\n%c🔹 [3] توزيع التقديرات:\n", "color: #4fc3f7; font-weight: bold; font-size: 14px;");
+      Object.entries(gradeDistribution)
+        .sort()
+        .forEach(([letter, count]) => {
+          console.log(`   ${letter} : ${count} طالب`);
+        });
+
+      console.log("\n%c═══════════════════════════════════════════", "color: #ffd700; font-weight: bold;");
+      console.log("%c          ✅ تم إنهاء التقرير بنجاح         ", "color: #4caf50; font-weight: bold; font-size: 14px;");
+      console.log("%c═══════════════════════════════════════════", "color: #ffd700; font-weight: bold;");
+
+      // تنبيه على الشاشة
+      alert("✅ تم توليد التقرير! اضغط F12 وافتح تبويب Console لرؤية النتائج.");
+    }
+
+    // ============================================
+    // 4. تشغيل تلقائي عند تحميل الصفحة
+    // ============================================
+    window.addEventListener("load", runAnalysis);
+  </script>
+
+</body>
+</html>
